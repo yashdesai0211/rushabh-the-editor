@@ -4,11 +4,11 @@
   Do not paste private API keys or passwords here.
 */
 const SITE_CONFIG = {
-  rushabhInstagram: "https://www.instagram.com/rushabh_creator21/",
+  rushabhInstagram: "https://www.instagram.com/rush.abh2103/",
   rushabhEmail: "rushabhnaik86@gmail.com",
   rushabhPhone: "+918793299284",
   rushabhWhatsApp: "918793299284",
-  developerEmail: "firstforgestudios.games@gmail.com",
+  developerEmail: "firstforgestudio.games@gmail.com",
   developerInstagram: "https://www.instagram.com/its_yashhh02/",
   projects: {
     devotional: { youtube: "", instagram: "", video: "assets/videos/devotional.mp4" },
@@ -165,3 +165,23 @@ if (developerInstagramButton && SITE_CONFIG.developerInstagram) {
   developerInstagramButton.target = "_blank";
   developerInstagramButton.rel = "noopener noreferrer";
 }
+
+
+// Report missing video files clearly instead of silently showing an empty player.
+document.querySelectorAll(".project-preview video, #dialogVideo").forEach((video) => {
+  video.addEventListener("error", () => {
+    const card = video.closest(".project-card");
+    const path = video.querySelector("source")?.getAttribute("src") || video.currentSrc || "unknown video path";
+    if (card) {
+      let warning = card.querySelector(".video-error-note");
+      if (!warning) {
+        warning = document.createElement("p");
+        warning.className = "video-error-note";
+        warning.textContent = "Video file not found or unsupported. Check that the MP4 is uploaded to assets/videos/ with the exact filename.";
+        card.querySelector(".project-info")?.appendChild(warning);
+      }
+      console.warn("Portfolio video failed:", path);
+    }
+  });
+});
+
